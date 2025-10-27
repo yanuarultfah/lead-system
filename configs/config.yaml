@@ -1,0 +1,50 @@
+app:
+  name: leads-api
+  env: dev
+  listen_addr: ":8181"
+  read_timeout: 5s
+  write_timeout: 10s
+  idle_timeout: 60s
+  max_body_bytes: 2MiB
+
+log:
+  level: info
+  pii_mask: true
+
+db:
+  uri: ${PG_URI}
+  max_conns: 30
+  min_conns: 5
+  max_conn_lifetime: 30m
+  max_conn_idle_time: 10m
+  healthz_query: "select 1"
+  statement_timeout_ms: 2000
+
+otel:
+  enable: true
+  endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
+
+traffic:
+  inject_glitch: ${INJECT_NET_GLITCH:-false}
+  jitter_pct: ${NET_JITTER_PCT:-0}
+  glitch_error_pct: ${NET_GLITCH_ERROR_PCT:-0}
+
+api:
+  allow_origins: ["*"]
+
+kafka:
+  enable: false
+  brokers: ["localhost:9092"]
+  acks: all
+  compression: snappy
+  topic_prefix: "leads."
+  sasl_mechanism: ""
+  sasl_username: ""
+  sasl_password: ""
+  security_protocol: "PLAINTEXT"
+
+schema_registry:
+  url: "http://localhost:8081"
+  username: ""
+  password: ""
+  format: "json"   # json | avro

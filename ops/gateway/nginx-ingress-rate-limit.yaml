@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: leads-api
+  annotations:
+    nginx.ingress.kubernetes.io/enable-rate-limiting: "true"
+    nginx.ingress.kubernetes.io/limit-rps: "50"
+    nginx.ingress.kubernetes.io/limit-burst-multiplier: "5"
+    nginx.ingress.kubernetes.io/limit-rate-after: "10"
+spec:
+  rules:
+  - host: leads.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: leads-api
+            port:
+              number: 8080
